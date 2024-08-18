@@ -46,17 +46,25 @@ func init() {
 }
 
 func initCli() {
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dive.yaml, ~/.config/dive/*.yaml, or $XDG_CONFIG_HOME/dive.yaml)")
-	rootCmd.PersistentFlags().String("source", "docker", "The container engine to fetch the image from. Allowed values: "+strings.Join(dive.ImageSources, ", "))
+	rootCmd.PersistentFlags().
+		StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dive.yaml, ~/.config/dive/*.yaml, or $XDG_CONFIG_HOME/dive.yaml)")
+	rootCmd.PersistentFlags().
+		String("source", "docker", "The container engine to fetch the image from. Allowed values: "+strings.Join(dive.ImageSources, ", "))
 	rootCmd.PersistentFlags().BoolP("version", "v", false, "display version number")
 	rootCmd.PersistentFlags().BoolP("ignore-errors", "i", false, "ignore image parsing errors and run the analysis anyway")
-	rootCmd.Flags().BoolVar(&isCi, "ci", false, "Skip the interactive TUI and validate against CI rules (same as env var CI=true)")
-	rootCmd.Flags().StringVarP(&exportFile, "json", "j", "", "Skip the interactive TUI and write the layer analysis statistics to a given file.")
-	rootCmd.Flags().StringVar(&ciConfigFile, "ci-config", ".dive-ci", "If CI=true in the environment, use the given yaml to drive validation rules.")
+	rootCmd.Flags().
+		BoolVar(&isCi, "ci", false, "Skip the interactive TUI and validate against CI rules (same as env var CI=true)")
+	rootCmd.Flags().
+		StringVarP(&exportFile, "json", "j", "", "Skip the interactive TUI and write the layer analysis statistics to a given file.")
+	rootCmd.Flags().
+		StringVar(&ciConfigFile, "ci-config", ".dive-ci", "If CI=true in the environment, use the given yaml to drive validation rules.")
 
-	rootCmd.Flags().String("lowestEfficiency", "0.9", "(only valid with --ci given) lowest allowable image efficiency (as a ratio between 0-1), otherwise CI validation will fail.")
-	rootCmd.Flags().String("highestWastedBytes", "disabled", "(only valid with --ci given) highest allowable bytes wasted, otherwise CI validation will fail.")
-	rootCmd.Flags().String("highestUserWastedPercent", "0.1", "(only valid with --ci given) highest allowable percentage of bytes wasted (as a ratio between 0-1), otherwise CI validation will fail.")
+	rootCmd.Flags().
+		String("lowestEfficiency", "0.9", "(only valid with --ci given) lowest allowable image efficiency (as a ratio between 0-1), otherwise CI validation will fail.")
+	rootCmd.Flags().
+		String("highestWastedBytes", "disabled", "(only valid with --ci given) highest allowable bytes wasted, otherwise CI validation will fail.")
+	rootCmd.Flags().
+		String("highestUserWastedPercent", "0.1", "(only valid with --ci given) highest allowable percentage of bytes wasted (as a ratio between 0-1), otherwise CI validation will fail.")
 
 	for _, key := range []string{"lowestEfficiency", "highestWastedBytes", "highestUserWastedPercent"} {
 		if err := ciConfig.BindPFlag(fmt.Sprintf("rules.%s", key), rootCmd.Flags().Lookup(key)); err != nil {
@@ -92,10 +100,10 @@ func initConfig() {
 	viper.SetDefault("keybinding.toggle-added-files", "ctrl+a")
 	viper.SetDefault("keybinding.toggle-removed-files", "ctrl+r")
 	viper.SetDefault("keybinding.toggle-modified-files", "ctrl+m")
-	viper.SetDefault("keybinding.toggle-unmodified-files", "ctrl+u")
+	viper.SetDefault("keybinding.toggle-unmodified-files", "ctrl+n")
 	viper.SetDefault("keybinding.toggle-wrap-tree", "ctrl+p")
-	viper.SetDefault("keybinding.page-up", "pgup,u")
-	viper.SetDefault("keybinding.page-down", "pgdn,d")
+	viper.SetDefault("keybinding.page-up", "pgup,ctrl+u")
+	viper.SetDefault("keybinding.page-down", "pgdn,ctrl+d")
 	viper.SetDefault("keybinding.up", "up,k")
 	viper.SetDefault("keybinding.down", "down,j")
 	viper.SetDefault("keybinding.left", "left,h")
