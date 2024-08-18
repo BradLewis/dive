@@ -296,6 +296,9 @@ ci-release: ci-check clean-dist $(CHANGELOG)
 ci-check:
 	@.github/scripts/ci-check.sh
 
+.PHONY: install
+install: ## Build and install the dive binary using go install
+	go install .
 
 ## Cleanup targets #################################
 
